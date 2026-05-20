@@ -38,11 +38,12 @@ Run it as your normal user — **not** as root. `sudo` is requested only when ne
 
 ## Available apps
 
-| Category | Apps |
-|----------|------|
-| Browsers | Brave, Firefox Developer Edition |
+| Category    | Apps |
+|-------------|------|
+| Browsers    | Brave, Firefox Developer Edition |
+| Development | Visual Studio Code, Git, Docker &amp; Docker Compose, Postman |
 
-More categories (Development, Productivity, Security, Multimedia) are on the way.
+More categories (Productivity, Security, Multimedia) are on the way.
 
 ## Project structure
 
@@ -54,7 +55,8 @@ setupkit/
 │   ├── system.sh      # distro detection, sudo, APT/repo helpers
 │   └── registry.sh    # category/app registry
 └── modules/
-    └── browsers.sh    # Browsers category
+    ├── browsers.sh     # Browsers category
+    └── development.sh  # Development category
 ```
 
 Adding a new category only requires dropping a file into `modules/`.

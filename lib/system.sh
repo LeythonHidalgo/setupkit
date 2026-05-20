@@ -17,6 +17,8 @@ system_detect_distro() {
   DISTRO_ID="${ID:-unknown}"
   DISTRO_LIKE="${ID_LIKE:-}"
   DISTRO_NAME="${PRETTY_NAME:-$DISTRO_ID}"
+  DISTRO_CODENAME="${VERSION_CODENAME:-}"
+  DISTRO_UBUNTU_CODENAME="${UBUNTU_CODENAME:-}"
 }
 
 # system_require_debian_based — abort on non Debian/Ubuntu systems.
