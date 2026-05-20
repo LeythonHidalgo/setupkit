@@ -27,6 +27,22 @@ mirrors.
 
 ## Usage
 
+### Quick run (no git, no traces)
+
+For a one-shot run with no extra tooling — only `curl` and `tar`, both included
+by default on Debian and Ubuntu:
+
+```bash
+curl -fsSL https://github.com/LeythonHidalgo/setupkit/archive/refs/heads/main.tar.gz | tar xz -C /tmp && bash /tmp/setupkit-main/setup.sh
+```
+
+The tarball lands on `/tmp/` (auto-cleared on reboot) so you can inspect the
+code before running it — no `curl | bash`.
+
+### Persistent install
+
+Clone it if you plan to re-run setupkit later for updates or uninstalls:
+
 ```bash
 git clone https://github.com/LeythonHidalgo/setupkit.git
 cd setupkit
