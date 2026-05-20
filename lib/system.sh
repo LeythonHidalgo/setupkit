@@ -65,8 +65,9 @@ system_pkg_version() {
 }
 
 # system_pkg_candidate <pkg> — latest version available from APT.
+# LC_ALL=C forces English labels so the awk match is locale-independent.
 system_pkg_candidate() {
-  apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}'
+  LC_ALL=C apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}'
 }
 
 # system_apt_update — refresh the APT package index.

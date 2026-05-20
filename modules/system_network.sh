@@ -214,18 +214,19 @@ app_protonvpn_latest() {
 readonly MC_FLATPAK_ID="io.missioncenter.MissionCenter"
 _MC_LATEST_CACHE=""
 
-# mc_installed_version — print the locally installed Flatpak version.
+# mc_installed_version / mc_remote_version — read the version from flatpak's
+# own output. LC_ALL=C keeps field labels in English so the awk match is
+# locale-independent (Flatpak translates "Version:" otherwise).
 mc_installed_version() {
-  flatpak info "$MC_FLATPAK_ID" 2>/dev/null \
+  LC_ALL=C flatpak info "$MC_FLATPAK_ID" 2>/dev/null \
     | awk -F': +' '/^[[:space:]]+Version:/ {print $2; exit}'
 }
 
-# mc_remote_version — print the latest version published on Flathub.
-# Cached per session to avoid hitting the remote on every menu redraw.
+# Cached per session to avoid hitting Flathub on every menu redraw.
 mc_remote_version() {
   if [[ -z "$_MC_LATEST_CACHE" ]]; then
     _MC_LATEST_CACHE="$(
-      flatpak remote-info flathub "$MC_FLATPAK_ID" 2>/dev/null \
+      LC_ALL=C flatpak remote-info flathub "$MC_FLATPAK_ID" 2>/dev/null \
         | awk -F': +' '/^[[:space:]]+Version:/ {print $2; exit}'
     )"
   fi
@@ -289,7 +290,8 @@ app_mission_center_update() {
 # app_mission_center_status — print the status string; exit 0 if installed, 1 if not.
 app_mission_center_status() {
   if flatpak info "$MC_FLATPAK_ID" >/dev/null 2>&1; then
-    printf '%s' "${C_GREEN}v$(mc_installed_version)${C_RESET}"
+    local v; v="$(mc_installed_version)"
+    printf '%s' "${C_GREEN}${v:+v}${v:-installed}${C_RESET}"
     return 0
   fi
   printf '%s' "${C_DIM}not installed${C_RESET}"
