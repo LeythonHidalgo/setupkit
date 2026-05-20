@@ -37,7 +37,8 @@ registry_add_app() {
 # registry_dispatch <app_id> <install|uninstall|status|update>
 # Routes an action to the app's handler function.
 registry_dispatch() {
-  local app_id="$1" action="$2" fn="app_${app_id}_${action}"
+  local app_id="$1" action="$2"
+  local fn="app_${app_id}_${action}"
   if ! declare -F "$fn" >/dev/null; then
     ui_error "Action '${action}' is not implemented for '${app_id}'."
     return 1
