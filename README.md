@@ -44,6 +44,7 @@ Run it as your normal user — **not** as root. `sudo` is requested only when ne
 | Development      | Visual Studio Code, Git, Docker &amp; Docker Compose, Postman |
 | Productivity     | Notion (PWA), Obsidian, Bitwarden |
 | System &amp; Network | WireGuard, Proton VPN, Mission Center |
+| Remote Access    | AnyDesk, RustDesk |
 
 More categories (Multimedia) are on the way.
 
@@ -60,7 +61,8 @@ setupkit/
     ├── browsers.sh        # Browsers category
     ├── development.sh     # Development category
     ├── productivity.sh    # Productivity category
-    └── system_network.sh  # System & Network category
+    ├── system_network.sh  # System & Network category
+    └── remote_access.sh   # Remote Access category
 ```
 
 Adding a new category only requires dropping a file into `modules/`.
