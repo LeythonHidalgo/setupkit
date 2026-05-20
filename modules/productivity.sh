@@ -198,6 +198,7 @@ app_obsidian_uninstall() {
     ui_warn "Obsidian is not installed."
   fi
   system_purge_user_data "$HOME/.config/obsidian"
+  rm -rf -- "$HOME/.cache/obsidian" "$HOME/.local/share/obsidian"
   ui_success "Obsidian fully removed."
 }
 
@@ -305,6 +306,7 @@ app_bitwarden_uninstall() {
     ui_warn "Bitwarden is not installed."
   fi
   system_purge_user_data "$HOME/.config/Bitwarden"
+  rm -rf -- "$HOME/.cache/Bitwarden" "$HOME/.local/share/Bitwarden"
   ui_success "Bitwarden fully removed."
 }
 

@@ -89,12 +89,16 @@ system_ensure_base_deps() {
   fi
 }
 
-# system_ensure_flatpak — install flatpak and configure the Flathub remote.
+# system_ensure_flatpak — install flatpak (plus dbus-x11, so flatpak invoked
+# under sudo never falls back to a missing dbus-launch) and add Flathub.
 system_ensure_flatpak() {
-  if ! system_pkg_installed flatpak; then
-    ui_info "Installing flatpak..."
+  local missing=()
+  system_pkg_installed flatpak  || missing+=(flatpak)
+  system_pkg_installed dbus-x11 || missing+=(dbus-x11)
+  if (( ${#missing[@]} )); then
+    ui_info "Installing Flatpak prerequisites: ${missing[*]}"
     system_as_root apt-get update -qq
-    system_as_root apt-get install -y flatpak
+    system_as_root apt-get install -y "${missing[@]}"
   fi
   if ! flatpak remotes 2>/dev/null | awk '{print $1}' | grep -qx flathub; then
     ui_info "Adding the Flathub remote..."

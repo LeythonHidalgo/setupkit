@@ -251,6 +251,16 @@ app_docker_uninstall() {
     ui_info "Docker data directories kept."
   fi
 
+  # Drop the 'docker' group membership and the group itself if no one is left.
+  if getent group docker >/dev/null; then
+    ui_info "Cleaning up the 'docker' group..."
+    system_as_root gpasswd -d "$(id -un)" docker 2>/dev/null || true
+    if [[ -z "$(getent group docker | cut -d: -f4)" ]]; then
+      system_as_root groupdel docker 2>/dev/null || true
+    fi
+  fi
+  rm -rf -- "$HOME/.docker"
+
   system_apt_update
   ui_success "Docker fully removed."
 }
