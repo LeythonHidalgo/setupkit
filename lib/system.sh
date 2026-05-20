@@ -88,6 +88,20 @@ system_ensure_base_deps() {
   fi
 }
 
+# system_ensure_flatpak — install flatpak and configure the Flathub remote.
+system_ensure_flatpak() {
+  if ! system_pkg_installed flatpak; then
+    ui_info "Installing flatpak..."
+    system_as_root apt-get update -qq
+    system_as_root apt-get install -y flatpak
+  fi
+  if ! flatpak remotes 2>/dev/null | awk '{print $1}' | grep -qx flathub; then
+    ui_info "Adding the Flathub remote..."
+    system_as_root flatpak remote-add --if-not-exists flathub \
+      https://dl.flathub.org/repo/flathub.flatpakrepo
+  fi
+}
+
 # system_download_keyring <url> <dest_path> — fetch a repo signing key.
 system_download_keyring() {
   local url="$1" dest="$2"

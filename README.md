@@ -38,13 +38,14 @@ Run it as your normal user — **not** as root. `sudo` is requested only when ne
 
 ## Available apps
 
-| Category     | Apps |
-|--------------|------|
-| Browsers     | Brave, Firefox Developer Edition |
-| Development  | Visual Studio Code, Git, Docker &amp; Docker Compose, Postman |
-| Productivity | Notion (PWA), Obsidian, Bitwarden |
+| Category         | Apps |
+|------------------|------|
+| Browsers         | Brave, Firefox Developer Edition |
+| Development      | Visual Studio Code, Git, Docker &amp; Docker Compose, Postman |
+| Productivity     | Notion (PWA), Obsidian, Bitwarden |
+| System &amp; Network | WireGuard, Proton VPN, Mission Center |
 
-More categories (Security, Multimedia) are on the way.
+More categories (Multimedia) are on the way.
 
 ## Project structure
 
@@ -56,9 +57,10 @@ setupkit/
 │   ├── system.sh      # distro detection, sudo, APT/repo helpers
 │   └── registry.sh    # category/app registry
 └── modules/
-    ├── browsers.sh      # Browsers category
-    ├── development.sh   # Development category
-    └── productivity.sh  # Productivity category
+    ├── browsers.sh        # Browsers category
+    ├── development.sh     # Development category
+    ├── productivity.sh    # Productivity category
+    └── system_network.sh  # System & Network category
 ```
 
 Adding a new category only requires dropping a file into `modules/`.
