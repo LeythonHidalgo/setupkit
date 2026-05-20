@@ -107,6 +107,22 @@ system_ensure_flatpak() {
   fi
 }
 
+# system_flatpak_deep_clean — offer to remove orphan runtimes, and (when no
+# Flatpak apps remain) the flatpak package and Flathub remote themselves.
+# Called from per-app Flatpak uninstall handlers; no-op without flatpak.
+system_flatpak_deep_clean() {
+  command -v flatpak >/dev/null 2>&1 || return 0
+  if ui_confirm "Remove unused Flatpak runtimes too? (can free hundreds of MB)"; then
+    system_as_root flatpak uninstall --unused -y 2>/dev/null || true
+  fi
+  if [[ -z "$(flatpak list --app 2>/dev/null)" ]] \
+     && ui_confirm "No Flatpak apps remain — also remove flatpak and the Flathub remote?"; then
+    system_as_root flatpak remote-delete --force flathub 2>/dev/null || true
+    system_as_root apt-get purge -y flatpak
+    system_as_root apt-get autoremove -y --purge
+  fi
+}
+
 # system_download_keyring <url> <dest_path> — fetch a repo signing key.
 system_download_keyring() {
   local url="$1" dest="$2"

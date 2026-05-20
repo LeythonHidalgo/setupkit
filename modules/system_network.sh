@@ -260,22 +260,7 @@ app_mission_center_uninstall() {
     ui_warn "Mission Center is not installed."
   fi
   system_purge_user_data "$HOME/.var/app/${MC_FLATPAK_ID}"
-
-  # Flatpak runtimes may be shared with other apps, so we ask before removing.
-  if command -v flatpak >/dev/null 2>&1 \
-     && ui_confirm "Remove unused Flatpak runtimes too? (can free hundreds of MB)"; then
-    system_as_root flatpak uninstall --unused -y 2>/dev/null || true
-  fi
-
-  # If no Flatpak apps remain at all, offer to drop flatpak itself.
-  if command -v flatpak >/dev/null 2>&1 \
-     && [[ -z "$(flatpak list --app 2>/dev/null)" ]] \
-     && ui_confirm "No Flatpak apps remain — also remove flatpak and the Flathub remote?"; then
-    system_as_root flatpak remote-delete --force flathub 2>/dev/null || true
-    system_as_root apt-get purge -y flatpak
-    system_as_root apt-get autoremove -y --purge
-  fi
-
+  system_flatpak_deep_clean
   ui_success "Mission Center fully removed."
 }
 

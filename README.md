@@ -42,11 +42,10 @@ Run it as your normal user — **not** as root. `sudo` is requested only when ne
 |------------------|------|
 | Browsers         | Brave, Firefox Developer Edition |
 | Development      | Visual Studio Code, Git, Docker &amp; Docker Compose, Postman |
+| Multimedia       | OBS Studio, VLC |
 | Productivity     | Notion (PWA), Obsidian, Bitwarden |
-| System &amp; Network | WireGuard, Proton VPN, Mission Center |
 | Remote Access    | AnyDesk, RustDesk |
-
-More categories (Multimedia) are on the way.
+| System &amp; Network | WireGuard, Proton VPN, Mission Center |
 
 ## Project structure
 
@@ -60,9 +59,10 @@ setupkit/
 └── modules/
     ├── browsers.sh        # Browsers category
     ├── development.sh     # Development category
+    ├── multimedia.sh      # Multimedia category
     ├── productivity.sh    # Productivity category
-    ├── system_network.sh  # System & Network category
-    └── remote_access.sh   # Remote Access category
+    ├── remote_access.sh   # Remote Access category
+    └── system_network.sh  # System & Network category
 ```
 
 Adding a new category only requires dropping a file into `modules/`.
