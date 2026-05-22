@@ -13,6 +13,7 @@
 # WireGuard  (ships in the official Debian/Ubuntu repositories)
 # ---------------------------------------------------------------------------
 readonly WIREGUARD_PKG="wireguard"
+readonly WIREGUARD_GUI_PKG="network-manager-gnome"
 
 app_wireguard_install() {
   ui_step "Installing WireGuard"
@@ -22,13 +23,27 @@ app_wireguard_install() {
   fi
   system_require_sudo || return 1
   system_apt_update   || return 1
-  if system_as_root apt-get install -y "$WIREGUARD_PKG"; then
-    ui_success "WireGuard installed (v$(system_pkg_version "$WIREGUARD_PKG"))."
-    ui_info "Drop a tunnel config at /etc/wireguard/<name>.conf and start it with 'sudo wg-quick up <name>'."
-  else
+  if ! system_as_root apt-get install -y "$WIREGUARD_PKG"; then
     ui_error "WireGuard installation failed."
     return 1
   fi
+
+  # WireGuard has no native GUI on Linux; NetworkManager lets you manage
+  # tunnels from the desktop's Network settings instead of the terminal.
+  if ui_confirm "Add graphical integration (manage tunnels from the Network settings UI)?"; then
+    system_as_root apt-get install -y "$WIREGUARD_GUI_PKG"
+    ui_info "Import a tunnel with: nmcli connection import type wireguard file /etc/wireguard/<name>.conf"
+  fi
+
+  # wg-quick calls 'resolvconf' when a tunnel config sets 'DNS ='; without it
+  # the tunnel fails to come up.
+  if ! command -v resolvconf >/dev/null 2>&1 \
+     && ui_confirm "Install resolvconf? (required when a tunnel sets DNS)"; then
+    system_as_root apt-get install -y resolvconf
+  fi
+
+  ui_success "WireGuard installed (v$(system_pkg_version "$WIREGUARD_PKG"))."
+  ui_info "Drop a tunnel config at /etc/wireguard/<name>.conf and start it with 'sudo wg-quick up <name>'."
 }
 
 app_wireguard_uninstall() {
